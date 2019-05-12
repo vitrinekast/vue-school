@@ -1,15 +1,19 @@
 <template>
-  <div id="app">
+<div id="app">
+<TheNavbar />
+  <div class="container push-top">
 
-    <div class="container">
-      <router-view/>
-    </div>
+    <router-view />
   </div>
+</div>
 </template>
 
 <script>
+import TheNavbar from '@/components/TheNavbar'
 export default {
-  name: 'app'
+  components: {
+    TheNavbar
+  }
 }
 </script>
 

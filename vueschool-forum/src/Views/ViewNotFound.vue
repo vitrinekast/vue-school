@@ -2,7 +2,7 @@
   <div class="col-full" :class="$style.centered">
     <h1 :class="$style.headerLarge">Not Found</h1>
     <p :class="$style.textLarge">Oops. we couldnt find what you're looking for. Why don't you go
-      <router-link :to="{ name: 'home'}">home</router-link>
+      <router-link :to="{ name: 'Home'}">home</router-link>
        instead.</p>
 
   </div>

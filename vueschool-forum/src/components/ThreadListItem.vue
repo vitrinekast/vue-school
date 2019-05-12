@@ -5,7 +5,7 @@
               <router-link :to="{ name: 'ThreadShow', params: {id: thread['.key']} }">{{thread.title}}</router-link>
           </p>
           <p class="text-faded text-xsmall">
-              By <a href="#">{{user.name}}</a>, {{thread.publishedAt}}.
+              By <a href="#">{{user.name}}</a>, <BaseDate :timestamp="thread.publishedAt" />.
           </p>
       </div>
 
@@ -29,7 +29,6 @@
 
 
 <script>
-import source from '@/data'
 
 export default {
   props: {
@@ -43,7 +42,7 @@ export default {
       return Object.keys(this.thread.posts).length - 1
     },
     user () {
-      return source.users[this.thread.userId]
+      return this.$store.state.users[this.thread.userId]
     }
   }
 }

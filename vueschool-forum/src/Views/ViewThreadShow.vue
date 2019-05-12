@@ -1,44 +1,51 @@
-<template >
-<div class="col-large push-top">
-  <h1>{{thread.title}}</h1>
-  <div class="post-list">
-    <div class="post" v-for="postId in thread.posts">
-      <div class="user-info">
-        <a href="#" class="user-name">{{users[posts[postId].userId].name}}</a>
-        <a href="#">
-          <img class="avatar-large" src="http://i.imgur.com/s0AzOkO.png" alt="">
-        </a>
-        <p class="desktop-only text-small">107 posts</p>
-      </div>
-      <div class="post-content">
-        <div>
-          {{posts[postId].text}}
-        </div>
-      </div>
-      <div class="post-date text-faded">
-        {{posts[postId].publishedAt}}
-      </div>
-    </div>
+<template>
+  <div class="col-large push-top">
+    <h1>{{thread.title}}</h1>
+    <p>
+
+      By <a href="#" class="link-unstyled">{{user.name}}</a>,
+      <BaseDate :timestamp="thread.publishedAt" />.
+      <span style="float:right; margin-top: 2px;" class="hide-mobile text-faded text-small">3 replies by 3 contributors</span>
+    </p>
+    <PostList :posts="posts" />
+
+    <PostEditor :threadId="id" @save="addPost" />
   </div>
-</div>
 </template>
 <script>
-import source from '@/data'
-console.log(source)
+import PostList from '@/components/PostList'
+import PostEditor from '@/components/PostEditor'
+
 export default {
+  components: {
+    PostList,
+    PostEditor
+  },
   props: {
     id: {
       required: true,
       type: String
     }
   },
-  data () {
-    return {
-      thread: source.threads[this.id],
-      posts: source.posts,
-      users: source.users
+  computed: {
+    user () {
+      return this.$store.state.users[this.thread.userId]
+    },
+    thread () {
+      return this.$store.state.threads[this.id]
+    },
+    posts () {
+      const postIds = Object.values(this.thread.posts)
+      return Object.values(this.$store.state.posts)
+        .filter(post => postIds.includes(post['.key']))
+    }
+  },
+  methods: {
+    addPost ({ post }) {
+      this.$store.dispatch('addPost', post)
     }
   }
+
 }
 </script>
 <style lang="css" scoped>
