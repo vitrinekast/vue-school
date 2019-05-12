@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 const CountObjectPropLength = (obj) => {
   if (typeof obj === 'object') {
     return Object.keys(obj).length
