@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class='forum-wrapper'>
+  <div class='forum-wrapper' v-if="forum">
     <div class="col-full push-top">
       <ul class="breadcrumbs">
         <li><a href="/"><i class="fa fa-home fa-btn"></i>Home</a></li>
@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { mapActions } from 'Vuex'
 import ThreadList from '@/components/ThreadList'
 
 export default {
@@ -48,6 +49,20 @@ export default {
       return Object.values(this.$store.state.threads)
         .filter(thread => thread.forumId === this.id)
     }
+  },
+
+  methods: {
+    ...mapActions(['fetchForum', 'fetchThreads', 'fetchUser'])
+  },
+
+  created () {
+    this.fetchForum({id: this.id})
+      .then((forum) => {
+        this.fetchThreads({ids: forum.threads})
+          .then((threads) => {
+            threads.forEach(thread => this.fetchUser({id: thread.userId}))
+          })
+      })
   }
 }
 </script>

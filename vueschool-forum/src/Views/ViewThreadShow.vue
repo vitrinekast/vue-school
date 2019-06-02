@@ -1,5 +1,5 @@
 <template>
-  <div class="col-large push-top">
+  <div class="col-large push-top" v-if='thread && user'>
     <h1>{{thread.title}}</h1>
     <p>
 
@@ -13,6 +13,7 @@
   </div>
 </template>
 <script>
+import { mapActions } from 'Vuex'
 import PostList from '@/components/PostList'
 import PostEditor from '@/components/PostEditor'
 
@@ -41,9 +42,22 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['fetchThread', 'fetchUser', 'fetchPosts']),
+
     addPost ({ post }) {
       this.$store.dispatch('addPost', post)
     }
+  },
+
+  created () {
+    this.fetchThread({id: this.id})
+      .then(thread => {
+        this.fetchUser({id: thread.userId})
+        this.fetchPosts({ids: Object.values(thread.posts)})
+          .then((posts) => {
+            posts.forEach(post => this.fetchUser({id: post.userId}))
+          })
+      })
   }
 
 }

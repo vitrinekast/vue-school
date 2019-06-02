@@ -17,7 +17,7 @@
     <nav class="navbar">
       <ul>
 
-        <li class="navbar-user">
+        <li class="navbar-user" v-if="user">
           <router-link :to="{ name: 'Profile', params: {} }">
 
             <img class="avatar-small" :src="user.avatar" alt="">

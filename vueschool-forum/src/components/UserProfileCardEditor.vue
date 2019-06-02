@@ -51,36 +51,40 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      user: {
-        required: true,
-        type: Object
-      }
+import { mapActions } from 'Vuex'
+
+export default {
+  props: {
+    user: {
+      required: true,
+      type: Object
+    }
+  },
+  methods: {
+    ...mapActions(['setUser', 'fetchForums']),
+
+    save () {
+      this.$store.setUser({...this.currentUser})
+      this.$router.push({name: 'Profile'})
     },
-    methods: {
-      save () {
-        this.$store.dispatch('setUser', {...this.currentUser})
-        this.$router.push({name: 'Profile'})
-      },
-      close () {
-        this.$router.push({name: 'Profile'})
-      }
+    close () {
+      this.$router.push({name: 'Profile'})
+    }
+  },
+  computed: {
+    userPostsCount () {
+      return this.$store.getters.usersPostsCount(this.user['.key'])
     },
-    computed: {
-      userPostsCount () {
-        return this.$store.getters.usersPostsCount(this.user['.key'])
-      },
-      userThreadCount () {
-        return this.$store.getters.userThreadCount(this.user['.key'])
-      }
-    },
-    data () {
-      return {
-        currentUser: {...this.user}
-      }
+    userThreadCount () {
+      return this.$store.getters.userThreadCount(this.user['.key'])
+    }
+  },
+  data () {
+    return {
+      currentUser: {...this.user}
     }
   }
+}
 </script>
 
 <style lang="css" scoped>
